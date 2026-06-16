@@ -3,121 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>보안 관제 센터 통제 구역 (Claude 전용)</title>
+  <title>Cyber Security Intelligence Center</title>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0; min-height: 100vh;
-      background: linear-gradient(135deg, #0f172a, #1e1e38);
-      font-family: 'Segoe UI', Arial, sans-serif; color: #e2e8f0;
+      background: linear-gradient(135deg, #090d16, #111827);
+      font-family: 'Segoe UI', system-ui, sans-serif; color: #f3f4f6;
       display: flex; justify-content: center; align-items: center;
     }
-    .wrapper { width: 100%; padding: 20px; display: flex; justify-content: center; }
+    .container-box { width: 100%; padding: 20px; display: flex; justify-content: center; }
     
-    .auth-container {
-      width: 100%; max-width: 420px;
-      background: #1e293b; border-radius: 16px; padding: 35px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      border: 1px solid #334155; text-align: center;
+    /* 인증 세션 화면 */
+    .gate-container {
+      width: 100%; max-width: 400px; background: #1f2937; border-radius: 12px;
+      padding: 40px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid #374151; text-align: center;
     }
-    .auth-logo { font-size: 50px; margin-bottom: 10px; }
-    .auth-container h2 { margin: 0 0 6px; color: #f8fafc; font-size: 24px; }
-    .auth-container p { margin: 0 0 24px; color: #94a3b8; font-size: 13px; }
-    .auth-form { display: flex; flex-direction: column; gap: 12px; }
+    .gate-title { font-size: 24px; margin: 0 0 10px; color: #f9fafb; font-weight: 700; }
+    .gate-desc { font-size: 13px; color: #9ca3af; margin-bottom: 25px; }
+    .input-group { display: flex; flex-direction: column; gap: 12px; }
 
-    .main-container {
-      width: min(950px, 100%);
-      background: #1e293b; border-radius: 16px; padding: 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); border: 1px solid #334155;
+    /* 메인 관제 대시보드 */
+    .dashboard-container {
+      width: min(1000px, 100%); background: #111827; border-radius: 14px;
+      padding: 30px; border: 1px solid #1f2937; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
     }
-    .main-title { margin: 0 0 6px; text-align: center; font-size: 26px; color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
-    .main-subtitle { text-align: center; color: #94a3b8; margin-bottom: 24px; font-size: 13px; }
+    .dash-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #1f2937; padding-bottom: 20px; }
+    .dash-title { margin: 0; color: #38bdf8; font-size: 28px; letter-spacing: -0.5px; }
+    .dash-subtitle { margin: 5px 0 0; color: #6b7280; font-size: 13px; }
 
-    input, textarea, select {
-      height: 48px; padding: 0 14px; border: 1px solid #475569; border-radius: 8px; 
-      font-size: 14px; outline: none; background: #0f172a; color: #f8fafc; transition: 0.2s;
+    input, textarea {
+      height: 46px; padding: 0 14px; background: #030712; border: 1px solid #374151;
+      border-radius: 6px; color: #f9fafb; font-size: 14px; outline: none; transition: 0.2s;
     }
-    textarea { height: 120px; padding: 14px; resize: vertical; font-family: monospace; }
-    input:focus, textarea:focus, select:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
-    
+    textarea { height: 130px; padding: 14px; resize: vertical; font-family: monospace; }
+    input:focus, textarea:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); }
+
     button {
-      border: none; border-radius: 8px; padding: 0 16px; height: 48px;
-      font-size: 15px; cursor: pointer; transition: 0.2s; font-weight: bold;
+      height: 46px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: 0.2s;
     }
-    button:hover { transform: translateY(-1px); opacity: 0.95; }
-    
-    .btn-primary { background: #0284c7; color: white; }
-    .btn-secondary { background: #334155; color: #cbd5e1; border: 1px solid #475569; }
-    .btn-secondary:hover { background: #475569; }
-    .btn-action { background: #0ea5e9; color: white; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
-    .btn-delete { background: #ef4444; color: white; padding: 4px 12px; height: 32px; font-size: 13px; border-radius: 6px; }
-    .btn-logout { background: #475569; color: white; height: 36px; font-size: 13px; }
+    button:hover { opacity: 0.95; transform: translateY(-1px); }
+    .btn-blue { background: #0284c7; color: #ffffff; }
+    .btn-gray { background: #374151; color: #d1d5db; }
+    .btn-core { background: #0ea5e9; color: #ffffff; width: 100%; box-shadow: 0 4px 12px rgba(14,165,233,0.2); }
+    .btn-danger { background: #dc2626; color: #ffffff; height: 32px; padding: 0 12px; font-size: 12px; }
+    .btn-audio { background: #059669; color: #ffffff; height: 32px; padding: 0 12px; font-size: 12px; }
 
-    .top-bar {
+    .top-panel {
       display: flex; justify-content: space-between; align-items: center;
-      gap: 12px; margin-bottom: 24px; padding: 12px 20px; border-radius: 10px; background: #0f172a;
-      border: 1px solid #334155;
+      padding: 12px 20px; background: #1f2937; border-radius: 8px; margin-bottom: 25px;
+      font-size: 14px; border: 1px solid #374151;
     }
-    .user-info { font-size: 14px; color: #cbd5e1; }
-    .status { min-height: 20px; margin-bottom: 16px; color: #38bdf8; font-size: 13px; text-align: center; font-family: monospace; }
-    
-    .ai-form { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; }
-    .list { display: flex; flex-direction: column; gap: 14px; }
-    .item {
-      padding: 18px; border-radius: 10px; background: #111827; border: 1px solid #374151;
-      display: flex; flex-direction: column; gap: 10px;
+    .status-monitor { text-align: center; padding: 10px; font-family: monospace; font-size: 13px; color: #38bdf8; margin-bottom: 20px; }
+
+    /* 로그 아웃풋 리스트 카딩 */
+    .log-list { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+    .log-card {
+      background: #1f2937; border-radius: 8px; padding: 20px; border: 1px solid #374151;
+      display: flex; flex-direction: column; gap: 12px;
     }
-    .item-header { display: flex; justify-content: space-between; align-items: center; }
-    .item-title { margin: 0; font-size: 15px; font-weight: bold; color: #f43f5e; font-family: monospace; }
-    .item-content { 
-      margin: 0; color: #e5e7eb; line-height: 1.6; font-size: 14px; white-space: pre-wrap; 
-      background: #1f2937; padding: 14px; border-radius: 6px; border-left: 4px solid #38bdf8;
+    .card-top { display: flex; justify-content: space-between; align-items: center; }
+    .card-title { margin: 0; font-size: 15px; font-weight: 700; color: #ef4444; font-family: monospace; }
+    .card-body {
+      margin: 0; font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; background: #111827;
+      padding: 15px; border-radius: 6px; border-left: 4px solid #38bdf8; color: #e5e7eb;
     }
-    .item-date { font-size: 12px; color: #9ca3af; font-family: monospace; }
-    .btn-play { background: #10b981; color: white; height: 32px; font-size: 13px; padding: 0 10px; border-radius: 6px; }
+    .card-time { font-size: 11px; color: #9ca3af; font-family: monospace; }
     
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-  <div class="wrapper">
-    
-    <section id="authPage" class="auth-container">
-      <div class="auth-logo">🛡️</div>
-      <h2>보안 관제 시스템</h2>
-      <p>Claude AI 인텔리전스 통제 소포트웨어</p>
-      
-      <div class="auth-form">
-        <input id="emailInput" type="email" placeholder="아이디 (이메일 주소)" required />
-        <input id="passwordInput" type="password" placeholder="비밀번호 (6자리 이상)" required />
-        <button type="button" class="btn-primary" id="loginBtn">시스템 접속 (Login)</button>
-        <button type="button" class="btn-secondary" id="signupBtn">신규 요원 계정 등록</button>
+  <div class="container-box">
+
+    <section id="authView" class="gate-container">
+      <div style="font-size: 40px; margin-bottom: 10px;">🛡️</div>
+      <h2 class="gate-title">보안 인텔리전스 시스템</h2>
+      <p class="gate-desc">Authorized Personnel Only</p>
+      <div class="input-group">
+        <input id="inpEmail" type="email" placeholder="보안 이메일 주소" required />
+        <input id="inpPassword" type="password" placeholder="비밀번호 (6자리 이상)" required />
+        <button id="btnLogin" class="btn-blue">시스템 접속 (Sign In)</button>
+        <button id="btnSignup" class="btn-gray">신규 요원 계정 발급 (Sign Up)</button>
       </div>
     </section>
 
-    <section id="mainPage" class="main-container hidden">
-      <h2 class="main-title">⚡ Cyber Security Control Panel</h2>
-      <div class="main-subtitle">Claude 3.5 기반 침해분석 및 음성 브리핑 감사 플랫폼</div>
-
-      <div class="top-bar">
-        <div class="user-info">🔑 접속 요원: <span id="userEmail" style="color:#38bdf8; font-weight:bold;"></span></div>
-        <button class="btn-logout" id="logoutBtn">접속 종료</button>
+    <section id="mainView" class="dashboard-container hidden">
+      <div class="dash-header">
+        <h1 class="dash-title">🔒 Cyber Security Control Command</h1>
+        <p class="dash-subtitle">Claude 3.5 기반 인공지능 취약점 진단 및 실시간 감사 감사 체계</p>
       </div>
 
-      <div class="ai-form">
-        <label style="font-weight: bold; color: #94a3b8; font-size: 14px;">🔍 분석 데이터 피드 입력 (코드, 로그 또는 질의):</label>
-        <textarea id="questionInput" placeholder="Claude가 정밀하게 진단할 악성 스크립트나 보안 위협 데이터를 입력하세요..."></textarea>
-        
-        <div style="display: flex; justify-content: flex-end;">
-          <button class="btn-action" id="askBtn" style="width: 100%; max-width: 300px;">🚨 원격 Claude AI 취약점 진단 가동</button>
-        </div>
+      <div class="top-panel">
+        <div>📡 연동 요원 고유 식별 노드: <span id="txtUser" style="color: #38bdf8; font-weight: bold;"></span></div>
+        <button id="btnLogout" class="btn-gray" style="height: 34px; padding: 0 14px;">보안 세션 해제</button>
       </div>
 
-      <div id="status" class="status"></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+        <label style="font-size: 14px; font-weight: 600; color: #9ca3af;">🕵️‍♂️ 이상 징후 원시 로그 데이터 분석 피드:</label>
+        <textarea id="inpQuestion" placeholder="여기에 실시간 방화벽 탐지 로그, 웹 서비스 에러 코드, 혹은 의심스러운 쉘 스크립트를 입력하세요..."></textarea>
+        <button id="btnTrigger" class="btn-core">🚨 Claude 원격 AI 취약점 정밀 진단 가동</button>
+      </div>
 
-      <h3 style="border-bottom: 2px solid #334155; padding-bottom: 8px; color: #38bdf8; font-size: 16px;">📋 데이터베이스 보관 감사 로그 (Audit Logs)</h3>
-      <div id="dataList" class="list"></div>
+      <div id="txtStatus" class="status-monitor">[SYSTEM] 실시간 감시 엔진 무결성 검증 완료</div>
+
+      <h3 style="font-size: 16px; color: #38bdf8; margin: 30px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #1f2937;">📋 가상 로컬 원격 보안 데이터베이스 감사 로그 (Realtime DB)</h3>
+      <div id="wrapperLogs" class="log-list"></div>
     </section>
 
   </div>
@@ -127,7 +121,7 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getDatabase, ref, push, remove, onValue, off } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // ⚠️ [필수 수정] 내 Firebase 프로젝트 설정 정보로 채워주세요.
+    // ⚠️ [필수 수정] 내 Firebase 프로젝트 생성 시 발급받은 웹 설정값(Config)을 복사해서 붙여넣으세요.
     const firebaseConfig = {
       apiKey: "AIzaSyDHltyqIQrpis3gcOeSC1t2EYfCOcQ2dzQ",
       authDomain: "cyber-security-dashboard-81406.firebaseapp.com",
@@ -137,185 +131,187 @@
       appId: "1:289373333519:web:4a7d63072423480a04db7a"
     };
 
-    // ⚠️ [필수 수정] 새로 배포한 웹 앱 URL을 여기에 정확히 넣어주세요.
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKdJXpezStxrgRnfIfWXYIF6ZoKLFGWo_4wnGJahPrJjdMGRAHooaxN8q2Kw7LW5rObA/exec';
+    // ⚠️ [필수 수정] 방금 전 'GAS 배포 관리'에서 새로 빌드하여 복사한 웹 앱 URL을 넣어주세요.
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKVZdXo12XHakEz49RhcgtsPDMKaAipQ222v0XBkMXYWBgloQPjGHKP1TZuoY6z89xSQ/exec';
 
+    // 인프라 모듈 인스턴스 초기화
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
 
-    const authPage = document.getElementById('authPage');
-    const mainPage = document.getElementById('mainPage');
-    const emailInput = document.getElementById('emailInput');
-    const passwordInput = document.getElementById('passwordInput');
-    const loginBtn = document.getElementById('loginBtn');
-    const signupBtn = document.getElementById('signupBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const userEmail = document.getElementById('userEmail');
-    const questionInput = document.getElementById('questionInput');
-    const askBtn = document.getElementById('askBtn');
-    const dataList = document.getElementById('dataList');
-    const statusBox = document.getElementById('status');
+    // DOM 포인터 바인딩
+    const authView = document.getElementById('authView');
+    const mainView = document.getElementById('mainView');
+    const inpEmail = document.getElementById('inpEmail');
+    const inpPassword = document.getElementById('inpPassword');
+    const btnLogin = document.getElementById('btnLogin');
+    const btnSignup = document.getElementById('btnSignup');
+    const btnLogout = document.getElementById('btnLogout');
+    const txtUser = document.getElementById('txtUser');
+    const inpQuestion = document.getElementById('inpQuestion');
+    const btnTrigger = document.getElementById('btnTrigger');
+    const txtStatus = document.getElementById('txtStatus');
+    const wrapperLogs = document.getElementById('wrapperLogs');
 
-    let currentUser = null;
-    let currentItemsRef = null;
+    let sessionUser = null;
+    let syncDbRef = null;
 
-    function setStatus(msg) { statusBox.textContent = msg; }
+    // 모니터링 상태 메시지 출력용 함수
+    function updateStatus(msg) { txtStatus.textContent = msg; }
 
-    function getFormValues() {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
-      if (!email || !password) { alert('이메일과 패스워드를 모두 작성바랍니다.'); return null; }
-      return { email, password };
-    }
-
-    signupBtn.addEventListener('click', async () => {
-      const creds = getFormValues(); if (!creds) return;
+    // Firebase Authentication : 회원 가입 
+    btnSignup.addEventListener('click', async () => {
+      const email = inpEmail.value.trim(); const pw = inpPassword.value.trim();
+      if(!email || !pw) return alert('보안 계정 정보(이메일/비밀번호)를 확인하십시오.');
       try {
-        await createUserWithEmailAndPassword(auth, creds.email, creds.password);
-        alert('신규 요원 등록이 성공적으로 완료되었습니다.');
-      } catch (err) { alert('등록 실패: ' + err.message); }
+        await createUserWithEmailAndPassword(auth, email, pw);
+        alert('신규 관제 요원 프로필 생성이 완료되었습니다.');
+      } catch (err) { alert('인증 계정 생성 실패: ' + err.message); }
     });
 
-    loginBtn.addEventListener('click', async () => {
-      const creds = getFormValues(); if (!creds) return;
+    // Firebase Authentication : 세션 접속 로그인
+    btnLogin.addEventListener('click', async () => {
+      const email = inpEmail.value.trim(); const pw = inpPassword.value.trim();
+      if(!email || !pw) return alert('접속 정보를 누락없이 입력하세요.');
       try {
-        await signInWithEmailAndPassword(auth, creds.email, creds.password);
-      } catch (err) { alert('인증에 실패했습니다. 계정 정보를 다시 확인하세요.'); }
+        await signInWithEmailAndPassword(auth, email, pw);
+      } catch (err) { alert('인증 실패: 자격 증명을 확인할 수 없습니다.'); }
     });
 
-    logoutBtn.addEventListener('click', async () => {
-      await signOut(auth);
-    });
+    // Firebase Authentication : 세션 만료 로그아웃
+    btnLogout.addEventListener('click', () => signOut(auth));
 
+    // 세션 인증 상태 실시간 모니터링 및 UI 전환 인터락
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        currentUser = user;
-        authPage.classList.add('hidden');
-        mainPage.classList.remove('hidden');
+        sessionUser = user;
+        authView.classList.add('hidden');
+        mainView.classList.remove('hidden');
         document.body.style.alignItems = "flex-start";
-        userEmail.textContent = user.email;
-        startRealtimeDatabase(user.uid);
+        txtUser.textContent = user.email;
+        attachRealtimeDatabase(user.uid);
       } else {
-        currentUser = null;
-        mainPage.classList.add('hidden');
-        authPage.classList.remove('hidden');
+        sessionUser = null;
+        mainView.classList.add('hidden');
+        authView.classList.remove('hidden');
         document.body.style.alignItems = "center";
-        stopRealtimeDatabase();
+        detachRealtimeDatabase();
       }
     });
 
-    function startRealtimeDatabase(uid) {
-      stopRealtimeDatabase();
-      setStatus('[SYSTEM] 보안 서버 원격 동기화 중...');
-      currentItemsRef = ref(database, `users/${uid}/security_logs`);
-      
-      onValue(currentItemsRef, (snapshot) => {
-        renderLogs(snapshot.val());
-        setStatus('[ONLINE] 실시간 감사 로그망 가동 중');
+    // Firebase Realtime Database: 실시간 변경 감지 노드 바인딩
+    function attachRealtimeDatabase(uid) {
+      detachRealtimeDatabase();
+      updateStatus('[CONNECT] 암호화 데이터베이스 노드 동기화 개시...');
+      syncDbRef = ref(database, `security_agents/${uid}/logs`);
+      onValue(syncDbRef, (snapshot) => {
+        renderAuditLogs(snapshot.val());
+        updateStatus('[ONLINE] 실시간 내부 인텔리전스 통신망 정상');
       });
     }
 
-    function stopRealtimeDatabase() {
-      if (currentItemsRef) { off(currentItemsRef); currentItemsRef = null; }
+    function detachRealtimeDatabase() {
+      if (syncDbRef) { off(syncDbRef); syncDbRef = null; }
     }
 
-    // AI 호출 및 시스템 처리
-    askBtn.addEventListener('click', async () => {
-      const question = questionInput.value.trim();
-      if (!question) { alert('분석할 원시 데이터를 채워넣으세요.'); return; }
+    // 인공지능 분석 가동 코어 트랜잭션 
+    btnTrigger.addEventListener('click', async () => {
+      const payloadQuery = inpQuestion.value.trim();
+      if (!payloadQuery) return alert('분석 피드 전송을 위해 데이터를 입력해 주세요.');
 
       try {
-        askBtn.disabled = true;
-        askBtn.textContent = '진단 중...';
-        setStatus('[PROCESSING] Claude 위협 분석 코어 작동 중...');
+        btnTrigger.disabled = true;
+        btnTrigger.textContent = '원격 보안 분석 연동 중...';
+        updateStatus('[PROCESSING] Claude 3.5 Sonnet 위협 진단 파이프라인 가동...');
 
-        // 1. 구글 앱스 스크립트를 경유하여 Claude 호출
-        const chatRes = await fetch(APPS_SCRIPT_URL, {
+        // 1. GAS 백엔드를 경유하여 Claude API 분석 요청 전송
+        const outbound = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ question: question })
+          body: JSON.stringify({ question: payloadQuery })
         });
-        const chatData = await chatRes.json();
-        if (chatData.error) throw new Error(chatData.error);
-        const answer = chatData.answer;
+        const inbound = await outbound.json();
+        if (inbound.error) throw new Error(inbound.error);
+        const analysisReport = inbound.answer;
 
-        setStatus('[SPEAKING] 브라우저 TTS 인프라 가동 및 대피령 음성 합성 중...');
-        // 2. 브라우저 엔진으로 실시간 음성 브리핑 자동 출력
-        speakText(answer);
+        updateStatus('[TTS_BROADCASTING] 요원 전용 음성 터미널 브리핑 송출 중...');
+        // 2. 수신한 인공지능 리포트를 음성(TTS)으로 스피커 출력 가동
+        executeSpeechEngine(analysisReport);
 
-        setStatus('[SYNC_DATABASE] 정밀 리포트를 감사 노드에 적재 중...');
-        // 3. Firebase 실시간 DB에 데이터 업로드
-        await push(ref(database, `users/${currentUser.uid}/security_logs`), {
-          title: `CLAUDE_ANALYSIS: ${question.substring(0, 15)}...`,
-          content: `📥 [입력 데이터]\n${question}\n\n🛡️ [Claude 정밀 분석 리포트]\n${answer}`,
-          createdAt: new Date().toLocaleString('ko-KR')
+        updateStatus('[PERSISTENCE] 보안 감사 리포트 원격 데이터베이스 보관 중...');
+        // 3. Firebase 실시간 데이터베이스에 분석 결과 데이터 적재 (유저 고유노드 하위)
+        await push(ref(database, `security_agents/${sessionUser.uid}/logs`), {
+          summary: `INCIDENT_FEED: ${payloadQuery.substring(0, 15)}...`,
+          details: `📥 [수집된 소스 피드]\n${payloadQuery}\n\n🛡️ [Claude 정밀 취약점 인텔리전스 리포트]\n${analysisReport}`,
+          timestamp: new Date().toLocaleString('ko-KR')
         });
 
-        questionInput.value = '';
-        setStatus('[COMPLETE] 감사 인프라에 성공적으로 병합되었습니다.');
+        inpQuestion.value = '';
+        updateStatus('[SUCCESS] 관제 데이터 통합 동기화가 성공적으로 끝났습니다.');
       } catch (err) {
         console.error(err);
-        setStatus('[FAIL] 시스템 연동 오류');
-        alert('요청 처리 오류: ' + err.message);
+        updateStatus('[FAIL] 트랜잭션 연동 실패 오류 발생');
+        alert('요청 처리 실패: ' + err.message);
       } finally {
-        askBtn.disabled = false;
-        askBtn.textContent = '🚨 원격 Claude AI 취약점 진단 가동';
+        btnTrigger.disabled = false;
+        btnTrigger.textContent = '🚨 Claude 원격 AI 취약점 정밀 진단 가동';
       }
     });
 
-    // 브라우저 내장 음성 출력 함수 (Web Speech API)
-    function speakText(text) {
+    // Web Speech API 기반 완벽 독립형 TTS 엔진 핵심부
+    function executeSpeechEngine(narrative) {
       if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // 이전 음성 취소
-        const cleanText = text.replace(/[*#`_\-]/g, ''); // 마크다운 기호 제거
-        const speech = new SpeechSynthesisUtterance(cleanText.substring(0, 300)); // 너무 길면 상위 300자만 요약 리딩
-        speech.lang = 'ko-KR';
-        speech.rate = 1.0; 
-        window.speechSynthesis.speak(speech);
+        window.speechSynthesis.cancel(); // 진행 중인 기존 안내 방송 소거
+        // 특수 특수기호나 마크다운 구문을 정리하여 자연스러운 한국어 리딩 유도
+        const refinedText = narrative.replace(/[*#`_\-]/g, '').substring(0, 350); 
+        const utterance = new SpeechSynthesisUtterance(refinedText);
+        utterance.lang = 'ko-KR';
+        utterance.rate = 1.05; // 리딩 스피드 조절
+        window.speechSynthesis.speak(utterance);
+      } else {
+        console.warn('현재 브라우저 환경은 내장 Speech 엔진을 지원하지 않습니다.');
       }
     }
 
-    function renderLogs(data) {
-      dataList.innerHTML = '';
-      if (!data) {
-        dataList.innerHTML = '<div style="text-align:center; padding:30px; color:#64748b; font-family:monospace;">[CLEAR] 보관된 감사 로그가 존재하지 않습니다.</div>';
+    // 실시간 DB 데이터 화면 리렌더링 바인더
+    function renderAuditLogs(snapshotData) {
+      wrapperLogs.innerHTML = '';
+      if (!snapshotData) {
+        wrapperLogs.innerHTML = '<div style="text-align:center; padding:40px; color:#4b5563; font-family:monospace;">[CLEAN] 탐지 및 보관된 사이버 위협 감사 이력이 없습니다.</div>';
         return;
       }
-      const entries = Object.entries(data).reverse();
-      entries.forEach(([id, item]) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        
-        // 브라우저 재생용 커스텀 스피커 버튼 배치
-        div.innerHTML = `
-          <div class="item-header">
-            <p class="item-title">📟 ${escapeHTML(item.title)}</p>
-            <div style="display:flex; gap:8px;">
-              <button class="btn-play" onclick="playLogAudio(\`${id}\`)">📢 브리핑 재생</button>
-              <button class="btn-delete" onclick="deleteLog('${id}')">소각</button>
+      
+      // 최신 로그가 맨 위에 표시되도록 역순 정렬
+      Object.entries(snapshotData).reverse().forEach(([logId, entity]) => {
+        const cardNode = document.createElement('div');
+        cardNode.className = 'log-card';
+        cardNode.innerHTML = `
+          <div class="card-top">
+            <p class="card-title">📟 ${escapeHTML(entity.summary)}</p>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn-audio" onclick="replaySpeech(\`${logId}\`)">📢 리포트 속독</button>
+              <button class="btn-danger" onclick="purgeLog('${logId}')">로그 소각</button>
             </div>
           </div>
-          <p class="item-content" id="content-${id}">${escapeHTML(item.content)}</p>
-          <div class="item-date">⏱️ 로그 생성 시간: ${item.createdAt}</div>
+          <p class="card-body" id="body-${logId}">${escapeHTML(entity.details)}</p>
+          <div class="card-time">⏱️ 수집 로그 생성계 타임스탬프: ${entity.timestamp}</div>
         `;
-        dataList.appendChild(div);
+        wrapperLogs.appendChild(cardNode);
       });
     }
 
-    // 로그 카드 우측 버튼 클릭 시 다시 소리 내어 읽어주는 함수 전역 등록
-    window.playLogAudio = function(id) {
-      const contentEl = document.getElementById(`content-${id}`);
-      if (contentEl) {
-        speakText(contentEl.textContent);
-      }
+    // 저장된 과거 감사 리포트를 다시 리딩하는 TTS 전역 핸들러
+    window.replaySpeech = function(logId) {
+      const nodeText = document.getElementById(`body-${logId}`);
+      if (nodeText) executeSpeechEngine(nodeText.textContent);
     };
 
-    window.deleteLog = async function(id) {
-      if (!currentUser) return;
-      if (!confirm('감사 로그 파일 시스템을 영구 소각하시겠습니까?')) return;
+    // Firebase Realtime Database: 원격 노드 단건 데이터 삭제 처리 (소각)
+    window.purgeLog = async function(logId) {
+      if (!sessionUser) return;
+      if (!confirm('이 보안 감사 로그를 데이터베이스에서 영구 소각합니까?')) return;
       try {
-        await remove(ref(database, `users/${currentUser.uid}/security_logs/${id}`));
-      } catch (err) { alert('명령 거부'); }
+        await remove(ref(database, `security_agents/${sessionUser.uid}/logs/${logId}`));
+      } catch (err) { alert('데이터 소각 거부됨'); }
     };
 
     function escapeHTML(text) {
