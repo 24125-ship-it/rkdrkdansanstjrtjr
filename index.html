@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Firebase 데이터 관리</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게임 기획 스튜디오</title>
   <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; background: linear-gradient(135deg, #e3f2fd, #fce4ec); font-family: Arial, sans-serif; color: #333; padding: 20px; }
-    .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
-    h2 { text-align: center; margin-top: 0; }
-    input { width: 100%; height: 45px; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 10px; outline: none; font-size: 15px; }
-    button { width: 100%; height: 45px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; color: white; margin-bottom: 10px; transition: 0.2s; }
+    :root { --primary: #7c3aed; --bg: #0f172a; --panel: #1e293b; --text: #f8fafc; }
+    body { font-family: 'Pretendard', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 800px; }
+    .card { background-color: var(--panel); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    h1, h2, h3 { margin-top: 0; color: #c4b5fd; }
+    input, textarea { width: 100%; padding: 12px; margin: 8px 0 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; box-sizing: border-box; }
+    input:focus, textarea:focus { outline: none; border-color: var(--primary); }
+    button { background-color: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-right: 8px; margin-bottom: 8px; }
     button:hover { opacity: 0.8; }
-    .btn-login { background: #42a5f5; }
-    .btn-signup { background: #7e57c2; }
-    .btn-logout { background: #ef5350; }
-    .btn-add { background: #66bb6a; }
-    .hidden { display: none; }
-    .item { background: #f7f9fb; padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #eee; }
-    .item h4 { margin: 0 0 5px 0; }
-    .item p { margin: 0 0 10px 0; color: #555; font-size: 14px; }
-    .btn-delete { background: #ef5350; height: 35px; width: 80px; font-size: 13px; margin: 0; }
+    .hidden { display: none !important; }
+    .idea-item { background: #0f172a; padding: 16px; border-radius: 8px; margin-bottom: 12px; position: relative; border: 1px solid #334155; }
+    .delete-btn { background-color: #ef4444; padding: 6px 12px; font-size: 0.8rem; position: absolute; right: 16px; top: 16px; margin: 0; }
   </style>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -30,33 +26,44 @@
 <body>
 
 <div class="container">
-  
-  <div id="loginBox">
+  <h1>🎮 AI 게임 기획 스튜디오</h1>
+
+  <div id="loginCard" class="card">
     <h2>개발자 로그인</h2>
-    <input type="email" id="email" placeholder="이메일 입력 (예: test@test.com)" />
-    <input type="password" id="password" placeholder="비밀번호 (6자리 이상)" />
-    <button class="btn-login" onclick="doLogin()">로그인</button>
-    <button class="btn-signup" onclick="doSignup()">회원가입</button>
-    <p id="errorMsg" style="color: red; font-size: 13px; text-align: center;"></p>
+    <input type="email" id="email" placeholder="이메일 입력">
+    <input type="password" id="password" placeholder="비밀번호 (6자리 이상)">
+    <button onclick="doLogin()">로그인</button>
+    <button onclick="doSignup()" style="background:#475569;">회원가입</button>
+    <p id="errorMsg" style="color: #ef4444; font-size: 14px; margin-top: 10px;"></p>
   </div>
 
-  <div id="mainBox" class="hidden">
-    <h2>내 아이디어 보관함</h2>
-    <p style="text-align: center; font-size: 14px;">접속 계정: <strong id="userEmail"></strong></p>
-    <button class="btn-logout" onclick="doLogout()">로그아웃</button>
-    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
-    
-    <input type="text" id="title" placeholder="아이디어 제목" />
-    <input type="text" id="content" placeholder="상세 내용" />
-    <button class="btn-add" onclick="doAdd()">저장하기</button>
-    
-    <div id="dataList" style="margin-top: 20px;"></div>
-  </div>
+  <div id="mainCard" class="hidden">
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+      <span>접속 계정: <b id="userEmail"></b></span>
+      <button onclick="doLogout()" style="background:#ef4444; margin:0;">로그아웃</button>
+    </div>
 
+    <div class="card">
+      <h3>🤖 클로드 AI 기획안 생성</h3>
+      <input type="text" id="aiKeyword" placeholder="원하는 게임 컨셉 (예: 사이버펑크 고양이 키우기)">
+      <button onclick="doAiRequest()">AI 기획 요청</button>
+      <button id="ttsBtn" onclick="doTts()" class="hidden" style="background:#10b981;">🔊 기획안 듣기 (TTS)</button>
+      <textarea id="aiResult" rows="6" placeholder="AI가 작성한 기획안이 이곳에 나옵니다." readonly></textarea>
+      <button id="saveAiBtn" onclick="copyToDb()" class="hidden" style="background:#3b82f6;">내 보관함에 바로 저장</button>
+    </div>
+
+    <div class="card">
+      <h3>💾 내 게임 기획 보관함</h3>
+      <input type="text" id="dbTitle" placeholder="게임 제목">
+      <textarea id="dbContent" rows="3" placeholder="상세 내용"></textarea>
+      <button onclick="saveToDb()">보관함에 추가</button>
+      <div id="dbList" style="margin-top: 20px;"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-  // 1. 회원님의 파이어베이스 설정값
+  // --- 1. 파이어베이스 설정 ---
   const firebaseConfig = {
     apiKey: "AIzaSyBjpo3ZhgLKsl2ZYcYs7yMuF-5VUjrTndE",
     authDomain: "rhkwp-e6ef4.firebaseapp.com",
@@ -64,104 +71,137 @@
     storageBucket: "rhkwp-e6ef4.firebasestorage.app",
     messagingSenderId: "273960470634",
     appId: "1:273960470634:web:9c838ca467f266bfc46213",
-    databaseURL: "https://rhkwp-e6ef4-default-rtdb.firebaseio.com" // 누락되었던 필수 주소 추가
+    databaseURL: "https://rhkwp-e6ef4-default-rtdb.firebaseio.com"
   };
 
-  // 2. 파이어베이스 실행
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.database();
-  
+
+  // --- 2. GAS (구글 앱스 스크립트) URL ---
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbw5pJSKYjfrarjHsWaay3BbWu2_5c-iliiWGwJBOAn0EFC0X5W2G4_mnSp-uNHswbQH/exec";
   let currentUid = null;
 
-  // --- 로그인 상태 실시간 감지 ---
+  // --- 3. 로그인 상태 감지 ---
   auth.onAuthStateChanged(function(user) {
     if (user) {
       currentUid = user.uid;
-      document.getElementById('loginBox').classList.add('hidden');
-      document.getElementById('mainBox').classList.remove('hidden');
+      document.getElementById('loginCard').classList.add('hidden');
+      document.getElementById('mainCard').classList.remove('hidden');
       document.getElementById('userEmail').innerText = user.email;
-      loadData(); // 로그인 성공 시 데이터 불러오기
+      loadDB(); // 로그인 되면 내 보관함 불러오기
     } else {
       currentUid = null;
-      document.getElementById('loginBox').classList.remove('hidden');
-      document.getElementById('mainBox').classList.add('hidden');
-      document.getElementById('dataList').innerHTML = '';
+      document.getElementById('loginCard').classList.remove('hidden');
+      document.getElementById('mainCard').classList.add('hidden');
+      document.getElementById('dbList').innerHTML = '';
     }
   });
 
-  // --- 회원가입 버튼 동작 ---
+  // --- 4. 회원가입/로그인/로그아웃 ---
   function doSignup() {
     const e = document.getElementById('email').value;
     const p = document.getElementById('password').value;
     if(!e || !p) return alert("이메일과 비밀번호를 입력해주세요.");
     
     auth.createUserWithEmailAndPassword(e, p)
-      .then(function() { alert("회원가입 완료! 바로 시작합니다."); })
-      .catch(function(error) { 
-        document.getElementById('errorMsg').innerText = "가입 에러: " + error.message; 
-        alert("회원가입 실패!");
-      });
+      .then(function() { alert("회원가입 성공!"); })
+      .catch(function(error) { document.getElementById('errorMsg').innerText = "가입 실패: " + error.message; });
   }
 
-  // --- 로그인 버튼 동작 ---
   function doLogin() {
     const e = document.getElementById('email').value;
     const p = document.getElementById('password').value;
     if(!e || !p) return alert("이메일과 비밀번호를 입력해주세요.");
     
     auth.signInWithEmailAndPassword(e, p)
-      .catch(function(error) { 
-        document.getElementById('errorMsg').innerText = "로그인 에러: " + error.message; 
-        alert("이메일이나 비밀번호가 틀렸습니다.");
-      });
+      .catch(function(error) { document.getElementById('errorMsg').innerText = "로그인 실패: 이메일과 비밀번호를 확인하세요."; });
   }
 
-  // --- 로그아웃 버튼 동작 ---
   function doLogout() {
     auth.signOut();
   }
 
-  // --- 데이터 추가 버튼 동작 ---
-  function doAdd() {
-    const t = document.getElementById('title').value;
-    const c = document.getElementById('content').value;
-    if(!t || !c) return alert("제목과 내용을 모두 입력해주세요.");
+  // --- 5. 클로드 AI 기획 요청 기능 ---
+  async function doAiRequest() {
+    const keyword = document.getElementById('aiKeyword').value;
+    if(!keyword) return alert('원하는 게임 컨셉(키워드)을 입력하세요.');
+    
+    const resultBox = document.getElementById('aiResult');
+    resultBox.value = "클로드 AI가 기획안을 작성중입니다... (약 5~10초 소요)";
+    
+    try {
+      const response = await fetch(GAS_URL, { 
+        method: "POST", 
+        body: JSON.stringify({ question: keyword }) 
+      });
+      const data = await response.json();
+      
+      // 결과 출력 및 버튼 보이기
+      resultBox.value = data.answer || data.error;
+      document.getElementById('ttsBtn').classList.remove('hidden');
+      document.getElementById('saveAiBtn').classList.remove('hidden');
+    } catch(e) { 
+      resultBox.value = "AI 연동 에러: " + e.message; 
+    }
+  }
 
-    db.ref('users/' + currentUid + '/items').push({
-      title: t,
-      content: c
+  // --- 6. TTS (음성 읽어주기) 기능 ---
+  function doTts() {
+    const text = document.getElementById('aiResult').value;
+    window.speechSynthesis.cancel(); // 기존 재생 정지
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = 'ko-KR';
+    window.speechSynthesis.speak(speech);
+  }
+
+  // --- 7. AI 기획안을 보관함 칸으로 텍스트 복사 ---
+  function copyToDb() {
+    document.getElementById('dbTitle').value = document.getElementById('aiKeyword').value + " (클로드 기획안)";
+    document.getElementById('dbContent').value = document.getElementById('aiResult').value;
+  }
+
+  // --- 8. 데이터베이스 (보관함) 저장 ---
+  function saveToDb() {
+    const title = document.getElementById('dbTitle').value;
+    const content = document.getElementById('dbContent').value;
+    if(!title || !content) return alert('제목과 내용을 모두 입력해주세요.');
+
+    db.ref('ideas/' + currentUid).push({
+      title: title,
+      content: content,
+      date: new Date().toLocaleDateString()
     }).then(function() {
-      document.getElementById('title').value = '';
-      document.getElementById('content').value = '';
+      document.getElementById('dbTitle').value = '';
+      document.getElementById('dbContent').value = '';
     }).catch(function(error) {
       alert("데이터 저장 실패: " + error.message);
     });
   }
 
-  // --- 데이터 불러오기 동작 ---
-  function loadData() {
-    db.ref('users/' + currentUid + '/items').on('value', function(snapshot) {
-      const list = document.getElementById('dataList');
+  // --- 9. 데이터베이스 (보관함) 불러오기 ---
+  function loadDB() {
+    db.ref('ideas/' + currentUid).on('value', function(snapshot) {
+      const list = document.getElementById('dbList');
       list.innerHTML = '';
       
       snapshot.forEach(function(child) {
         const data = child.val();
         list.innerHTML += `
-          <div class="item">
-            <h4>${data.title}</h4>
-            <p>${data.content}</p>
-            <button class="btn-delete" onclick="doDelete('${child.key}')">삭제</button>
+          <div class="idea-item">
+            <h4 style="margin: 0 0 10px 0;">${data.title} <span style="font-size:12px; color:gray;">(${data.date})</span></h4>
+            <p style="margin: 0; white-space: pre-wrap; color: #cbd5e1; font-size: 0.9rem;">${data.content}</p>
+            <button class="delete-btn" onclick="deleteIdea('${child.key}')">삭제</button>
           </div>
         `;
       });
     });
   }
 
-  // --- 데이터 삭제 동작 ---
-  window.doDelete = function(key) {
-    if(confirm("이 아이디어를 삭제할까요?")) {
-      db.ref('users/' + currentUid + '/items/' + key).remove();
+  // --- 10. 데이터베이스 (보관함) 개별 삭제 ---
+  window.deleteIdea = function(key) {
+    if(confirm('이 기획안을 삭제하시겠습니까?')) {
+      db.ref('ideas/' + currentUid + '/' + key).remove();
     }
   }
 </script>
