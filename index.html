@@ -3,20 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>게임 기획 스튜디오</title>
+  <title>Game Dev Studio | AI 기획</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Orbit&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  
   <style>
-    :root { --primary: #7c3aed; --bg: #0f172a; --panel: #1e293b; --text: #f8fafc; }
-    body { font-family: 'Pretendard', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 800px; }
-    .card { background-color: var(--panel); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    h1, h2, h3 { margin-top: 0; color: #c4b5fd; }
-    input, textarea { width: 100%; padding: 12px; margin: 8px 0 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; box-sizing: border-box; }
-    input:focus, textarea:focus { outline: none; border-color: var(--primary); }
-    button { background-color: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-right: 8px; margin-bottom: 8px; }
-    button:hover { opacity: 0.8; }
+    :root {
+      --bg-color: #0b0c10;
+      --card-bg: #1f2833;
+      --neon-cyan: #66fcf1;
+      --neon-blue: #45a29e;
+      --neon-purple: #c026d3;
+      --neon-pink: #f00946;
+      --text-main: #c5c6c7;
+      --text-bright: #ffffff;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      background-image: radial-gradient(circle at 50% 0%, #1f2833 0%, #0b0c10 70%);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    h1 {
+      font-family: 'Orbit', sans-serif;
+      text-align: center;
+      color: var(--neon-cyan);
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-blue);
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+    }
+
+    h2, h3 {
+      font-family: 'Orbit', sans-serif;
+      color: var(--text-bright);
+      margin-top: 0;
+      border-bottom: 2px solid var(--neon-blue);
+      padding-bottom: 10px;
+      display: inline-block;
+    }
+
+    .card {
+      background-color: rgba(31, 40, 51, 0.8);
+      border: 1px solid #2b3746;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    /* 입력창 디자인 */
+    input, textarea {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0 20px;
+      background: #0b0c10;
+      border: 1px solid #45a29e;
+      border-radius: 8px;
+      color: var(--neon-cyan);
+      box-sizing: border-box;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(102, 252, 241, 0.3);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #444;
+    }
+
+    /* 네온 버튼 디자인 */
+    button {
+      background: transparent;
+      color: var(--neon-cyan);
+      border: 2px solid var(--neon-cyan);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      font-family: 'Orbit', sans-serif;
+    }
+
+    button:hover {
+      background: var(--neon-cyan);
+      color: var(--bg-color);
+      box-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    .btn-secondary {
+      border-color: var(--neon-purple);
+      color: var(--neon-purple);
+    }
+    .btn-secondary:hover {
+      background: var(--neon-purple);
+      color: white;
+      box-shadow: 0 0 15px var(--neon-purple);
+    }
+
+    .btn-danger {
+      border-color: var(--neon-pink);
+      color: var(--neon-pink);
+    }
+    .btn-danger:hover {
+      background: var(--neon-pink);
+      color: white;
+      box-shadow: 0 0 15px var(--neon-pink);
+    }
+
     .hidden { display: none !important; }
-    .idea-item { background: #0f172a; padding: 16px; border-radius: 8px; margin-bottom: 12px; position: relative; border: 1px solid #334155; }
-    .delete-btn { background-color: #ef4444; padding: 6px 12px; font-size: 0.8rem; position: absolute; right: 16px; top: 16px; margin: 0; }
+
+    /* 보관함 아이템 디자인 */
+    .idea-item {
+      background: #111418;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      position: relative;
+      border-left: 4px solid var(--neon-purple);
+      transition: transform 0.2s;
+    }
+    
+    .idea-item:hover {
+      transform: translateX(5px);
+      border-color: var(--neon-cyan);
+    }
+
+    .idea-item h4 {
+      margin: 0 0 10px 0;
+      color: var(--neon-cyan);
+      font-size: 1.2rem;
+    }
+
+    .idea-item p {
+      margin: 0;
+      white-space: pre-wrap;
+      color: #a0aab2;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .delete-btn {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      margin: 0;
+    }
+
+    /* 스크롤바 커스텀 */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-color); }
+    ::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
   </style>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -26,38 +187,47 @@
 <body>
 
 <div class="container">
-  <h1>🎮 AI 게임 기획 스튜디오</h1>
+  <h1>🎮 GAME DEV SYSTEM_</h1>
 
   <div id="loginCard" class="card">
-    <h2>개발자 로그인</h2>
-    <input type="email" id="email" placeholder="이메일 입력">
-    <input type="password" id="password" placeholder="비밀번호 (6자리 이상)">
-    <button onclick="doLogin()">로그인</button>
-    <button onclick="doSignup()" style="background:#475569;">회원가입</button>
-    <p id="errorMsg" style="color: #ef4444; font-size: 14px; margin-top: 10px;"></p>
+    <h2>> DEVELOPER LOGIN</h2>
+    <input type="email" id="email" placeholder="E-MAIL (예: player1@studio.com)">
+    <input type="password" id="password" placeholder="PASSWORD (6자리 이상)">
+    
+    <div style="margin-top: 10px;">
+      <button onclick="doLogin()">SYSTEM 접속</button>
+      <button onclick="doSignup()" class="btn-secondary">신규 개발자 등록</button>
+    </div>
+    <p id="errorMsg" style="color: var(--neon-pink); font-size: 14px; margin-top: 15px;"></p>
   </div>
 
   <div id="mainCard" class="hidden">
-    <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-      <span>접속 계정: <b id="userEmail"></b></span>
-      <button onclick="doLogout()" style="background:#ef4444; margin:0;">로그아웃</button>
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 30px;">
+      <span style="font-family: 'Orbit', sans-serif;">접속 계정: <b id="userEmail" style="color: var(--neon-cyan);"></b></span>
+      <button onclick="doLogout()" class="btn-danger" style="margin:0;">접속 종료</button>
     </div>
 
     <div class="card">
-      <h3>🤖 클로드 AI 기획안 생성</h3>
-      <input type="text" id="aiKeyword" placeholder="원하는 게임 컨셉 (예: 사이버펑크 고양이 키우기)">
-      <button onclick="doAiRequest()">AI 기획 요청</button>
-      <button id="ttsBtn" onclick="doTts()" class="hidden" style="background:#10b981;">🔊 기획안 듣기 (TTS)</button>
-      <textarea id="aiResult" rows="6" placeholder="AI가 작성한 기획안이 이곳에 나옵니다." readonly></textarea>
-      <button id="saveAiBtn" onclick="copyToDb()" class="hidden" style="background:#3b82f6;">내 보관함에 바로 저장</button>
+      <h3>> AI CLAUDE_ 기획 엔진</h3>
+      <input type="text" id="aiKeyword" placeholder="원하는 게임 컨셉을 입력하세요 (예: 사이버펑크 액션 로그라이크)">
+      
+      <div>
+        <button onclick="doAiRequest()">AI 기획 요청</button>
+        <button id="ttsBtn" onclick="doTts()" class="btn-secondary hidden">🔊 기획안 브리핑 (TTS)</button>
+      </div>
+      
+      <textarea id="aiResult" rows="7" placeholder="AI가 작성한 기획안 데이터가 이곳에 수신됩니다." readonly></textarea>
+      <button id="saveAiBtn" onclick="copyToDb()" class="btn-secondary hidden" style="width: 100%;">이 데이터를 보관함에 복사</button>
     </div>
 
     <div class="card">
-      <h3>💾 내 게임 기획 보관함</h3>
-      <input type="text" id="dbTitle" placeholder="게임 제목">
-      <textarea id="dbContent" rows="3" placeholder="상세 내용"></textarea>
-      <button onclick="saveToDb()">보관함에 추가</button>
-      <div id="dbList" style="margin-top: 20px;"></div>
+      <h3>> DATABASE_ 내 기획 보관함</h3>
+      <input type="text" id="dbTitle" placeholder="프로젝트 타이틀명">
+      <textarea id="dbContent" rows="4" placeholder="세부 기획 내용 입력"></textarea>
+      
+      <button onclick="saveToDb()" style="width: 100%;">데이터베이스에 저장 (DB_SAVE)</button>
+      
+      <div id="dbList" style="margin-top: 30px;"></div>
     </div>
   </div>
 </div>
@@ -105,8 +275,8 @@
     if(!e || !p) return alert("이메일과 비밀번호를 입력해주세요.");
     
     auth.createUserWithEmailAndPassword(e, p)
-      .then(function() { alert("회원가입 성공!"); })
-      .catch(function(error) { document.getElementById('errorMsg').innerText = "가입 실패: " + error.message; });
+      .then(function() { alert("새로운 개발자 등록이 완료되었습니다!"); })
+      .catch(function(error) { document.getElementById('errorMsg').innerText = "가입 오류: " + error.message; });
   }
 
   function doLogin() {
@@ -115,7 +285,7 @@
     if(!e || !p) return alert("이메일과 비밀번호를 입력해주세요.");
     
     auth.signInWithEmailAndPassword(e, p)
-      .catch(function(error) { document.getElementById('errorMsg').innerText = "로그인 실패: 이메일과 비밀번호를 확인하세요."; });
+      .catch(function(error) { document.getElementById('errorMsg').innerText = "접속 실패: 계정 정보를 다시 확인하세요."; });
   }
 
   function doLogout() {
@@ -125,10 +295,10 @@
   // --- 5. 클로드 AI 기획 요청 기능 ---
   async function doAiRequest() {
     const keyword = document.getElementById('aiKeyword').value;
-    if(!keyword) return alert('원하는 게임 컨셉(키워드)을 입력하세요.');
+    if(!keyword) return alert('원하는 게임 컨셉(키워드)을 먼저 입력하세요.');
     
     const resultBox = document.getElementById('aiResult');
-    resultBox.value = "클로드 AI가 기획안을 작성중입니다... (약 5~10초 소요)";
+    resultBox.value = "AI 클로드가 데이터를 연산 중입니다... (약 5~10초 소요)";
     
     try {
       const response = await fetch(GAS_URL, { 
@@ -142,7 +312,7 @@
       document.getElementById('ttsBtn').classList.remove('hidden');
       document.getElementById('saveAiBtn').classList.remove('hidden');
     } catch(e) { 
-      resultBox.value = "AI 연동 에러: " + e.message; 
+      resultBox.value = "SYSTEM ERROR: " + e.message; 
     }
   }
 
@@ -157,15 +327,18 @@
 
   // --- 7. AI 기획안을 보관함 칸으로 텍스트 복사 ---
   function copyToDb() {
-    document.getElementById('dbTitle').value = document.getElementById('aiKeyword').value + " (클로드 기획안)";
+    document.getElementById('dbTitle').value = "[AI 프로젝트] " + document.getElementById('aiKeyword').value;
     document.getElementById('dbContent').value = document.getElementById('aiResult').value;
+    
+    // 복사 후 부드럽게 스크롤을 내려줌
+    document.getElementById('dbTitle').focus();
   }
 
   // --- 8. 데이터베이스 (보관함) 저장 ---
   function saveToDb() {
     const title = document.getElementById('dbTitle').value;
     const content = document.getElementById('dbContent').value;
-    if(!title || !content) return alert('제목과 내용을 모두 입력해주세요.');
+    if(!title || !content) return alert('타이틀과 세부 기획을 모두 작성해야 합니다.');
 
     db.ref('ideas/' + currentUid).push({
       title: title,
@@ -174,6 +347,7 @@
     }).then(function() {
       document.getElementById('dbTitle').value = '';
       document.getElementById('dbContent').value = '';
+      alert("데이터베이스에 성공적으로 기록되었습니다.");
     }).catch(function(error) {
       alert("데이터 저장 실패: " + error.message);
     });
@@ -189,9 +363,9 @@
         const data = child.val();
         list.innerHTML += `
           <div class="idea-item">
-            <h4 style="margin: 0 0 10px 0;">${data.title} <span style="font-size:12px; color:gray;">(${data.date})</span></h4>
-            <p style="margin: 0; white-space: pre-wrap; color: #cbd5e1; font-size: 0.9rem;">${data.content}</p>
-            <button class="delete-btn" onclick="deleteIdea('${child.key}')">삭제</button>
+            <h4>${data.title} <span style="font-size:12px; color:#45a29e; font-family: 'Noto Sans KR';">(${data.date})</span></h4>
+            <p>${data.content}</p>
+            <button class="btn-danger delete-btn" onclick="deleteIdea('${child.key}')">삭제</button>
           </div>
         `;
       });
@@ -200,7 +374,7 @@
 
   // --- 10. 데이터베이스 (보관함) 개별 삭제 ---
   window.deleteIdea = function(key) {
-    if(confirm('이 기획안을 삭제하시겠습니까?')) {
+    if(confirm('이 기획 데이터를 데이터베이스에서 삭제하시겠습니까?')) {
       db.ref('ideas/' + currentUid + '/' + key).remove();
     }
   }
